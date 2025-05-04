@@ -7,7 +7,6 @@
 	./modules/hyprland.nix
 	./modules/laptop/hyprland.nix
 	./modules/laptop/waybar.nix
-	./modules/laptop/wofi.nix
 	];
 
 }

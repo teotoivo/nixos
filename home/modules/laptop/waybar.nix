@@ -71,7 +71,7 @@
   environment.systemPackages = with pkgs; [
     # -- Waybar itself (already brought in by programs.waybar, but
     #    having it here doesn’t hurt if you prefer all tools listed) --
-    waybar pavucontrol networkmanagerapplet nm-connection-editor
+    waybar pavucontrol networkmanagerapplet
   ];
 }
 
