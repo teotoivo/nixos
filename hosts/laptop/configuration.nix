@@ -7,7 +7,7 @@
 		../../modules/login.nix
 		];
 
-	services.xserver.videoDrivers = [ "nvidia" ];
+	services.xserver.videoDrivers = [ "modesetting" ];
 	environment.sessionVariables.HYPR_SCALE = "1.25";
 }
 

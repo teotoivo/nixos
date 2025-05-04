@@ -1,5 +1,5 @@
 
-{ config, pkgs, ... }:
+{ config, pkgs, pkgsUnstable, ... }:
 
 {
 	time.timeZone = "Europe/Helsinki";
@@ -23,6 +23,8 @@
 
 	nixpkgs.config.allowUnfree = true;
 
+	hardware.nvidia.open = true;
+
 	networking.networkmanager.enable = true;
 
 	environment.systemPackages = with pkgs; [
@@ -31,10 +33,13 @@
 		git
 		vscode
 		tree
+		pkgsUnstable.firefox
 	];
 
 	fonts.fontconfig.enable = true;
-	fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-  ];
+fonts.packages = with pkgs; [
+	(nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+];
+
+
 }

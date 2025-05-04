@@ -1,13 +1,13 @@
 
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 
 {
 	programs.hyprland.enable = true;
-	programs.hyprland.package = pkgs.hyprland;
+	programs.hyprland.package = pkgsUnstable.hyprland;
 
-	services.dbus.packages = [ pkgs.xdg-desktop-portal-hyprland ];
+	services.dbus.packages = [ pkgsUnstable.xdg-desktop-portal-hyprland ];
 	
-	environment.systemPackages = with pkgs; [
+	environment.systemPackages = with pkgsUnstable; [
 		# ── Terminals / launchers ────────────────────────────────
     ghostty                   # $terminal
     wofi                      # $menu
@@ -27,10 +27,6 @@
     # ── Media, volume & brightness helpers ───────────────────
     playerctl                 # MPRIS media keys
     brightnessctl             # backlight control
-    (pipewirePackages.wpctl)  # volume control (`wpctl`) from PipeWire
-
-    # ── NVIDIA PRIME helper (for `sudo prime-offload`) ───────
-    nvidia-prime
 
     # ── Optional (commented‑out line in your Hypr cfg) ───────
     networkmanagerapplet      # nm-applet tray icon
