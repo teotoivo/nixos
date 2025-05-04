@@ -2,11 +2,13 @@
 { ... }:
 
 {
-	imports = [ ./common.nix ./modules/hyprland.nix ];
+	imports = [
+	./common.nix
+	./modules/hyprland.nix
+	./modules/laptop/hyprland.nix
+	./modules/laptop/waybar.nix
+	./modules/laptop/wofi.nix
+	];
 
-	wayland.windowManager.hyprland.settings = {
-		monitor = [ "eDP-1,preferred,0x0,1.25" ];
-		"input:touchpad:tap-to-click" = "true";
-	};
 }
 
