@@ -1,75 +1,107 @@
 { pkgs, ... }:
 
+###############################################################################
+#  THEMING (cursor, GTK) — these are top‑level Home‑Manager options
+###############################################################################
+
 {
+  # Cursor
+  home.pointerCursor = {
+    gtk.enable = true;
+    package    = pkgs.bibata-cursors;
+    name       = "Bibata-Modern-Classic";
+    size       = 16;
+  };
+
+  # GTK look‑and‑feel
+  gtk = {
+    enable = true;
+    theme.package     = pkgs.flat-remix-gtk;
+    theme.name        = "Flat-Remix-GTK-Grey-Darkest";
+
+    iconTheme.package = pkgs.gnome.adwaita-icon-theme;
+    iconTheme.name    = "Adwaita";
+
+    font = { name = "Sans"; size = 11; };
+  };
+
+###############################################################################
+#  HYPRLAND — Home‑Manager module
+###############################################################################
+
   wayland.windowManager.hyprland = {
     enable = true;
 
-    # Use Hyprland provided by the system‑level (NixOS) module
-    package       = null;
-    portalPackage = null;
-
-    # Make Hyprland export your full PATH to user services
+    # Export full env to user‑services (fixes PATH for hypridle, etc.)
     systemd.variables = [ "--all" ];
 
     settings = {
-      ###############
-      # ENVIRONMENT #
-      ###############
+
+      #########################
+      ##  ENVIRONMENT VARS  ##
+      #########################
       env = [
         "WLR_NO_HARDWARE_CURSORS,1"
         "WLR_DRM_NO_ATOMIC,1"
         "XCURSOR_SIZE,24"
+        "XCURSOR_THEME,Nordzy-hyprcursors-catppuccin-mocha-maroon"
         "HYPRCURSOR_SIZE,24"
+        "HYPRCURSOR_THEME,Nordzy-hyprcursors-catppuccin-mocha-maroon"
       ];
 
       ################
-      # MONITOR SET‑#
+      ##  MONITORS  ##
       ################
       monitor = [
+        "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M27Q X 23320B006060, 2560x1440@144, 0x0, 1, workspace, 1"
+        "desc:Samsung Electric Company Odyssey G52A H4ZRC00753, 2560x1440@144, 2560x-1120, 1, transform, 1, workspace, 1"
         "eDP-1, 2560x1600@240, 0x0, 1.25"
       ];
 
-      ###############
-      # AUTOSTART   #
-      ###############
+      ################
+      ##  AUTOSTART ##
+      ################
       "exec-once" = [
-        "waybar & swaync & hypridle & hyprpaper"
+       "waybar"
+  	"swaync"
+  	"hypridle"
+  	"hyprpaper"
         "hyprctl dispatch workspace 1"
         "nwg-look -a"
       ];
 
-      ###########
-      # GENERAL #
-      ###########
+      #########
+      ## WM  ##
+      #########
       general = {
-        gaps_in        = 3;
-        gaps_out       = 10;
-        border_size    = 1;
-        col.active_border   = "rgba(89B4FAee) rgba(CBA6F7ee) 45deg";
-        col.inactive_border = "rgba(313244aa)";
-        resize_on_border = false;
-        allow_tearing    = false;
-        layout           = "dwindle";
+        gaps_in            = 3;
+        gaps_out           = 10;
+        border_size        = 1;
+        "col.active_border"  = "rgba(89B4FAee) rgba(CBA6F7ee) 45deg";
+        "col.inactive_border" = "rgba(313244aa)";
+        resize_on_border   = false;
+        allow_tearing      = false;
+        layout             = "dwindle";
       };
 
       cursor.no_hardware_cursors = true;
 
       decoration = {
         rounding       = 10;
-        rounding_power = 2;
         active_opacity   = 1.0;
         inactive_opacity = 1.0;
-        shadow = {
-          enabled      = true;
-          range        = 4;
-          render_power = 3;
-          color        = "rgba(1a1a1aee)";
-        };
+
+        # new shadow keys (Hyprland ≥ 0.46)
+        drop_shadow         = true;
+        shadow_range        = 4;
+        shadow_render_power = 3;
+        shadow_offset       = "0 0";
+
         blur = {
-          enabled   = true;
-          size      = 7;
-          passes    = 1;
-          vibrancy  = 0.1696;
+          enabled  = true;
+          size     = 7;
+          passes   = 1;
+          vibrancy = 0.1696;
         };
       };
 
@@ -83,51 +115,50 @@
           "quick,0.15,0,0.1,1"
         ];
         animation = [
-          "global, 1, 10, default"
-          "border, 1, 5.39, easeOutQuint"
-          "windows, 1, 4.79, easeOutQuint"
-          "windowsIn, 1, 4.1, easeOutQuint, popin 87%"
-          "windowsOut, 1, 1.49, linear, popin 87%"
-          "fadeIn, 1, 1.73, almostLinear"
-          "fadeOut, 1, 1.46, almostLinear"
-          "fade, 1, 3.03, quick"
-          "layers, 1, 3.81, easeOutQuint"
-          "layersIn, 1, 4, easeOutQuint, fade"
-          "layersOut, 1, 1.5, linear, fade"
-          "fadeLayersIn, 1, 1.79, almostLinear"
-          "fadeLayersOut, 1, 1.39, almostLinear"
-          "workspaces, 1, 1.94, almostLinear, fade"
-          "workspacesIn, 1, 1.21, almostLinear, fade"
-          "workspacesOut, 1, 1.94, almostLinear, fade"
+          "global,     1, 10, default"
+          "border,     1,  5, easeOutQuint"
+          "windows,    1,  4, easeOutQuint"
+          "windowsIn,  1,  4, easeOutQuint, popin 87%"
+          "windowsOut, 1,  2, linear,       popin 87%"
+          "fadeIn,     1,  2, linear"
+          "fadeOut,    1,  2, linear"
+          "workspaces, 1,  2, linear,       fade"
         ];
       };
 
       dwindle = {
-        pseudotile      = true;
-        preserve_split  = true;
+        pseudotile     = true;
+        preserve_split = true;
       };
 
-      master.new_status = "master";
+      master.new_status      = "master";
       misc.force_default_wallpaper = 0;
 
-      ########
-      # INPUT#
-      ########
+      ##########
+      ## INPUT##
+      ##########
       input = {
-        kb_layout   = "fi";
-        follow_mouse = 1;
-        sensitivity  = 0;
+        kb_layout     = "fi";
+        follow_mouse  = 1;
+        sensitivity   = 0;
         touchpad.natural_scroll = true;
       };
       gestures.workspace_swipe = false;
-      device."epic-mouse-v1".sensitivity = -0.5;
 
-      ###########
-      # BINDS   #
-      ###########
+      ################
+      ## KEY BINDS  ##
+      ################
       "$mainMod" = "SUPER";
 
-      bind = [
+      # workspace {1..10} and move‑to counterparts
+      bind = let
+        wsBinds = builtins.concatLists (builtins.genList
+          (i:
+            let n = toString (i + 1); in [
+              "$mainMod, ${n}, workspace, ${n}"
+              "$mainMod SHIFT, ${n}, movetoworkspace, ${n}"
+            ]) 10);
+      in [
         "$mainMod, Q, exec, ghostty"
         "$mainMod, C, killactive,"
         "$mainMod, M, exit,"
@@ -136,39 +167,42 @@
         "$mainMod, space, exec, wofi --show drun"
         "$mainMod, P, pseudo,"
         "$mainMod, F, fullscreen"
+
+        # screenshots
         ", PRINT, exec, hyprshot -m window"
         "SHIFT, PRINT, exec, hyprshot -m region"
+
+        # lock
         "$mainMod ALT, L, exec, hyprlock"
+
+        # focus
         "$mainMod, h, movefocus, l"
         "$mainMod, l, movefocus, r"
         "$mainMod, k, movefocus, u"
         "$mainMod, j, movefocus, d"
+
+        # move window
         "$mainMod SHIFT, H, movewindow, l"
         "$mainMod SHIFT, L, movewindow, r"
         "$mainMod SHIFT, K, movewindow, u"
         "$mainMod SHIFT, J, movewindow, d"
-      ] ++ (builtins.concatLists (builtins.genList
-            (i:
-              let n = toString (i + 1); in [
-                "$mainMod, ${n}, workspace, ${n}"
-                "$mainMod SHIFT, ${n}, movetoworkspace, ${n}"
-              ])
-            10));
 
-      # Mouse / scroll bindings
+        # special workspace
+        "$mainMod, S, togglespecialworkspace, magic"
+        "$mainMod SHIFT, S, movetoworkspace, special:magic"
+
+        # scroll through workspaces
+        "$mainMod, mouse_down, workspace, e+1"
+        "$mainMod, mouse_up, workspace, e-1"
+      ] ++ wsBinds;
+
+      # mouse / resize
       bindm = [
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"
       ];
 
-      bind = [
-        "$mainMod, S, togglespecialworkspace, magic"
-        "$mainMod SHIFT, S, movetoworkspace, special:magic"
-        "$mainMod, mouse_down, workspace, e+1"
-        "$mainMod, mouse_up, workspace, e-1"
-      ];
-
-      # Volume / brightness / media keys
+      # volume / brightness / media keys
       bindel = [
         ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
         ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
@@ -184,9 +218,9 @@
         ", XF86AudioPrev, exec, playerctl previous"
       ];
 
-      ###############
-      # WINDOW RULES#
-      ###############
+      #################
+      ## WINDOW RULE ##
+      #################
       windowrule  = [ "opacity 0.92 0.92, title:.*[Ff]irefox.*" ];
       windowrulev2 = [
         "suppressevent maximize, class:.*"
@@ -194,31 +228,6 @@
       ];
 
       xwayland.force_zero_scaling = true;
-    };
-
-    #################################
-    # THEMES (Home‑Manager helpers) #
-    #################################
-    # These two HM options fix cursor / GTK themes everywhere.
-    inherit (pkgs)
-      flat-remix-gtk
-      bibata-cursors
-      adwaita-icon-theme;
-
-    home.pointerCursor = {
-      gtk.enable = true;
-      package    = pkgs.bibata-cursors;
-      name       = "Bibata-Modern-Classic";
-      size       = 16;
-    };
-
-    gtk = {
-      enable = true;
-      theme.package     = pkgs.flat-remix-gtk;
-      theme.name        = "Flat-Remix-GTK-Grey-Darkest";
-      iconTheme.package = pkgs.adwaita-icon-theme;
-      iconTheme.name    = "Adwaita";
-      font = { name = "Sans"; size = 11; };
     };
   };
 }

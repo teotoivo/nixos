@@ -13,6 +13,20 @@
 
 	boot.loader.systemd-boot.enable = true;
 	boot.loader.efi.canTouchEfiVariables = true;
+	security.pam.loginLimits = [
+  	{
+    		domain = "@users";
+   	 	type = "soft";
+   	 	item = "nofile";
+   	 	value = "65536";
+  	}
+  	{
+    		domain = "@users";
+    		type = "hard";
+    		item = "nofile";
+    		value = "65536";
+  	}
+	];
 
 	system.stateVersion = "24.05";
 
@@ -35,6 +49,16 @@
 		tree
 		pkgsUnstable.firefox
 	];
+
+services.pipewire = {
+		enable = true;
+		audio.enable = true;
+		alsa.enable = true;
+		alsa.support32Bit = true;
+		pulse.enable = true;
+		jack.enable = true; # optional
+	};
+
 
 	fonts.fontconfig.enable = true;
 fonts.packages = with pkgs; [
