@@ -87,7 +87,7 @@ environment.variables.PATH = lib.mkForce "${pkgs.brightnessctl}/bin:${pkgs.hyprl
 
 imports = [
 	./neovim.nix
-  ./firefox.nix
+  #./firefox.nix
 ];
 
 }

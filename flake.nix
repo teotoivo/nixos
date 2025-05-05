@@ -9,10 +9,13 @@
 		home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
 		neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    nixpkgs-mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    nixpkgs-mozilla = {
+      url = "git+https://github.com/nixpkgs-mozilla/nixpkgs-mozilla.git";  # You can also specify a version here if you want
+      flake = true;
+    };
 	};
 
-	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, nixpkgs-mozilla, ... }@inputs:
+	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixpkgs-mozilla, neovim-nightly-overlay, ... }@inputs:
 	let
 		username = "teotoivo";
 		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
@@ -56,6 +59,7 @@
 				specialArgs = {
 					inherit username;
 					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
+          pkgs = for_each_system."x86_64-linux".pkgs;
 					inputs = inputs;
 				};
 				modules = [
@@ -66,6 +70,16 @@
 					{
 						home-manager.users.${username}.imports = [ ./home/laptop.nix ];
 					}
+{
+      environment.systemPackages = let
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
+      in with pkgs; [
+        latest.firefox-nightly-bin
+      ];
+    }
 				];
 			};
 		};
