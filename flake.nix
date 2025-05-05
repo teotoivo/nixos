@@ -11,7 +11,7 @@
 		neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 	};
 
-	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, ... }:
+	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, ... }@inputs:
 	let
 		username = "teotoivo";
 		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
@@ -21,7 +21,6 @@
 				pkgs = import nixpkgs {
 					inherit system;
 					config.allowUnfree = true;
-					overlays = [ neovim-nightly-overlay.overlay.default ];
 				};
 				pkgs_unstable = import nixpkgs-unstable {
 					inherit system;
@@ -38,6 +37,7 @@
 				specialArgs = {
 					inherit username;
 					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
+					inputs = inputs;
 				};
 				modules = [
 					./hosts/pc/configuration.nix
@@ -55,6 +55,7 @@
 				specialArgs = {
 					inherit username;
 					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
+					inputs = inputs;
 				};
 				modules = [
 					./hosts/laptop/configuration.nix
