@@ -1,17 +1,8 @@
-{ config, pkgs, pkgsUnstable ? null, ... }:
+{ config, pkgs, pkgsUnstable, ... }:
 
-let
-	ghostty_pkg =
-		if pkgsUnstable != null && pkgsUnstable ? ghostty then
-			pkgsUnstable.ghostty
-		else if pkgs ? ghostty then
-			pkgs.ghostty
-		else
-			throw "ghostty not found in either pkgsUnstable or pkgs.";
-in
 
 {
-	home.packages = [ ghostty_pkg ];
+	home.packages = [ pkgsUnstable.ghostty ];
 
 	xdg.configFile."ghostty/config".text = ''
 		background-opacity = 0.95
