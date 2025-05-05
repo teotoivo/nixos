@@ -10,38 +10,36 @@ let
     }
 
     listener {
-      timeout = 450;  # 2.5min
+      timeout = 450  # 2.5min
       on-timeout = "brightnessctl -s set 10";  # Set monitor backlight to minimum
       on-resume = "brightnessctl -r";  # Restore monitor backlight
     }
 
     # Keyboard backlight control
     listener {
-      timeout = 450;  # 2.5min
+      timeout = 450  # 2.5min
       on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";  # Turn off keyboard backlight
       on-resume = "brightnessctl -rd rgb:kbd_backlight";  # Restore keyboard backlight
     }
 
     listener {
-      timeout = 600;  # 5min
+      timeout = 600  # 5min
       on-timeout = "loginctl lock-session";  # Lock screen after timeout
     }
 
     listener {
-      timeout = 660;  # 5.5min
+      timeout = 660  # 5.5min
       on-timeout = "hyprctl dispatch dpms off";  # Turn off screen after timeout
       on-resume = "hyprctl dispatch dpms on";  # Turn on screen after resuming from timeout
     }
 
     listener {
-      timeout = 1800;  # 30min
+      timeout = 1800  # 30min
       on-timeout = "systemctl suspend";  # Suspend system after inactivity
     }
   '';
 
 in {
-
-
   xdg.configFile."hypr/hypridle.conf".text = hypridle_conf;
 
   home.packages = with pkgs; [
