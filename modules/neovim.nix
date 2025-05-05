@@ -1,10 +1,16 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
+	neovim_unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+
+	neovim_wrapped = pkgs.wrapNeovimUnstable neovim_unwrapped {
+		# You can extend with extra runtime dependencies here
+	};
+
 in {
 	programs.neovim = {
 		enable = true;
-		package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.neovim;
+		package = neovim_wrapped;
 		viAlias = true;
 		vimAlias = true;
 	};
