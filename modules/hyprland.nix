@@ -8,9 +8,6 @@
 	services.dbus.packages = [ pkgsUnstable.xdg-desktop-portal-hyprland ];
 	
 	environment.systemPackages = with pkgsUnstable; [
-		# ── Terminals / launchers ────────────────────────────────
-    ghostty                   # $terminal
-    wofi                      # $menu
 
     # ── Core Hyprland companions ─────────────────────────────
     hyprshot                  # screenshots
