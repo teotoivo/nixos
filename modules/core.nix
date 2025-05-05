@@ -28,7 +28,11 @@
   	}
 	];
 
-	system.stateVersion = "24.05";
+	
+
+	system.stateVersion = "24.11";
+
+	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
 	users.users.teotoivo = {
 		isNormalUser = true;
@@ -42,6 +46,7 @@
 	networking.networkmanager.enable = true;
 
 	environment.systemPackages = with pkgs; [
+		home-manager
 		htop
 		vim
 		git

@@ -9,6 +9,7 @@
 	
 	environment.systemPackages = with pkgsUnstable; [
 
+	pkgsUnstable.ghostty
     # ── Core Hyprland companions ─────────────────────────────
     hyprshot                  # screenshots
     hyprlock                  # lock‑screen
