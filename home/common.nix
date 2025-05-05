@@ -13,6 +13,7 @@
 		./modules/wofi.nix
 		./modules/tmux.nix
 		./modules/yazi.nix
+		./modules/ghostty.nix
 	];
 }
 
