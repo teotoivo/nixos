@@ -23,7 +23,7 @@
 			bind-key l select-pane -R
 			set -g pane-base-index 1
 
-			# TPM & Catppuccin (loaded from config below)
+			# Catppuccin plugin
 			run-shell ~/.config/tmux/catppuccin.tmux
 
 			# Status customization
@@ -40,17 +40,20 @@
 			bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
 			bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
 			bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
-			bind-key -n 'C-;' if-shell "$is_vim" 'send-keys C-;'  'select-pane -l'
 
+			# Replace invalid select-pane -l with last-pane
+			bind-key -n 'C-\\' if-shell "$is_vim" 'send-keys C-\\' 'last-pane'
+
+			# Copy-mode bindings
 			bind-key -T copy-mode-vi 'C-h' select-pane -L
 			bind-key -T copy-mode-vi 'C-j' select-pane -D
 			bind-key -T copy-mode-vi 'C-k' select-pane -U
 			bind-key -T copy-mode-vi 'C-l' select-pane -R
-			bind-key -T copy-mode-vi 'C-;' select-pane -l
+			bind-key -T copy-mode-vi 'C-\\' last-pane
 		'';
 	};
 
-	# Install Catppuccin plugin (assumes manual plugin handling)
+	# Catppuccin plugin file
 	xdg.configFile."tmux/catppuccin.tmux".source =
 		pkgs.fetchFromGitHub {
 			owner = "catppuccin";
@@ -59,7 +62,7 @@
 			sha256 = "16g7sfxvfy2j3zk27winx5g4jxmz7i02rhbfzjhkxnih590bg0d6";
 		} + "/catppuccin.tmux";
 
-	# Plugin config
+	# Catppuccin style config
 	xdg.configFile."tmux/tmux.conf".text = ''
 		set -g @catppuccin_flavor "mocha"
 		set -g @catppuccin_window_status_style "rounded"
