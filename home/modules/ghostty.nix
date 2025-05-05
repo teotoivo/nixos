@@ -1,7 +1,7 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, pkgsUnstable, ... }:
 
 {
-	home.packages = [ nixpkgs-unstable.ghostty ];
+	home.packages = [ pkgsUnstable.ghostty ];
 
 	xdg.configFile."ghostty/config".text = ''
 		background-opacity = 0.95
