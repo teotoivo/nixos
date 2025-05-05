@@ -9,9 +9,10 @@
 		home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
 		neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    nixpkgs-mozilla.url = "github:mozilla/nixpkgs-mozilla";
 	};
 
-	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, ... }@inputs:
+	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, nixpkgs-mozilla, ... }@inputs:
 	let
 		username = "teotoivo";
 		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
