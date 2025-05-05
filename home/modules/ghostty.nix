@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-	home.packages = [ pkgs.ghostty ];
+	home.packages = [ pkgsUnstable.ghostty ];
 
 	xdg.configFile."ghostty/config".text = ''
 		background-opacity = 0.95
