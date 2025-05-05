@@ -1,5 +1,5 @@
 
-{ config, pkgs, pkgsUnstable, ... }:
+{ config, pkgs, ... }:
 
 {
 	home.stateVersion = "24.05";
