@@ -12,6 +12,7 @@
 		./modules/waybar.nix
 		./modules/wofi.nix
 		./modules/tmux.nix
+		./modules/yazi.nix
 	];
 }
 
