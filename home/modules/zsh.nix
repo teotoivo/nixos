@@ -7,11 +7,14 @@
 		pkgs.fzf
 	];
 
-home.file.".p10k.zsh".source = /etc/nixos/home/dotfiles/p10k.zsh;
+home.file.".p10k.zsh".source = ./p10k.zsh;
 
 	# Symlink powerlevel10k where oh-my-zsh expects it
 	home.file.".oh-my-zsh/custom/themes/powerlevel10k".source =
 		"${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
+
+home.file.".zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh".source =
+	./home/extras/zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh;
 
 	programs.zsh = {
 		enable = true;
@@ -48,6 +51,10 @@ home.file.".p10k.zsh".source = /etc/nixos/home/dotfiles/p10k.zsh;
 			export PATH="$HOME/.local/bin:$PATH"
 
       [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+      if [ -f "$HOME/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh" ]; then
+		    source "$HOME/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh"
+      fi
 		'';
 	};
 }
