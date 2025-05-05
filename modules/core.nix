@@ -15,8 +15,13 @@
 	security.sudo.wheelNeedsPassword = true;
 	security.auditd.enable = true;
 
-	boot.loader.systemd-boot.enable = true;
-	boot.loader.efi.canTouchEfiVariables = true;
+boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.devices = [ "nodev" ];
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.useOSProber = true;
+
 	security.pam.loginLimits = [
   	{
     		domain = "@users";
@@ -76,6 +81,9 @@ services.pipewire = {
 fonts.packages = with pkgs; [
 	(nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
 ];
+
+# Correctly set environment variables and paths
+environment.variables.PATH = lib.mkForce "${pkgs.brightnessctl}/bin:${pkgs.hyprland}/bin:${pkgs.systemd}/bin:/home/teotoivo/.nix-profile/bin";
 
 imports = [
 	./neovim.nix

@@ -13,7 +13,7 @@
     # ── Core Hyprland companions ─────────────────────────────
     hyprshot                  # screenshots
     hyprlock                  # lock‑screen
-    hypridle                  # idle daemon
+    pkgsUnstable.hypridle                  # idle daemon
     hyprpaper                 # wallpaper daemon
     waybar                    # panel / status bar
     swaynotificationcenter    # “swaync” – notification daemon
