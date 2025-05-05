@@ -59,7 +59,7 @@
 			owner = "catppuccin";
 			repo = "tmux";
 			rev = "HEAD"; # pin to a specific commit if needed
-			sha256 = "sha256-16g7sfxvfy2j3zk27winx5g4jxmz7i02rhbfzjhkxnih590bg0d6"; # replace with actual
+			sha256 = "16g7sfxvfy2j3zk27winx5g4jxmz7i02rhbfzjhkxnih590bg0d6"; # replace with actual
 		} + "/catppuccin.tmux";
 
 	# Plugin config (nonstandard @variables must go in a separate file or inline in `extraConfig`)
