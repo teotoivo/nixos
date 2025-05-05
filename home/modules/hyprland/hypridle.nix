@@ -1,76 +1,52 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ config, pkgs, ... }:
 
 let
-	hypridle_config = ''
-		general {
-			lock_cmd = pidof hyprlock || hyprlock
-			before_sleep_cmd = loginctl lock-session
-			after_sleep_cmd = hyprctl dispatch dpms on
-		}
+  # General Hyprland idle configuration
+  hypridle_conf = ''
+    general {
+      lock_cmd = "pidof hyprlock || hyprlock";  # Prevent multiple hyprlock instances
+      before_sleep_cmd = "loginctl lock-session";  # Lock before suspend
+      after_sleep_cmd = "hyprctl dispatch dpms on";  # Turn on the display after resuming from sleep
+    }
 
-		listener {
-			timeout = 450
-			on-timeout = brightnessctl -s set 10
-			on-resume = brightnessctl -r
-		}
+    listener {
+      timeout = 450;  # 2.5min
+      on-timeout = "brightnessctl -s set 10";  # Set monitor backlight to minimum
+      on-resume = "brightnessctl -r";  # Restore monitor backlight
+    }
 
-		listener {
-			timeout = 450
-			on-timeout = brightnessctl -sd rgb:kbd_backlight set 0
-			on-resume = brightnessctl -rd rgb:kbd_backlight
-		}
+    # Keyboard backlight control
+    listener {
+      timeout = 450;  # 2.5min
+      on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";  # Turn off keyboard backlight
+      on-resume = "brightnessctl -rd rgb:kbd_backlight";  # Restore keyboard backlight
+    }
 
-		listener {
-			timeout = 600
-			on-timeout = loginctl lock-session
-		}
+    listener {
+      timeout = 600;  # 5min
+      on-timeout = "loginctl lock-session";  # Lock screen after timeout
+    }
 
-		listener {
-			timeout = 660
-			on-timeout = hyprctl dispatch dpms off
-			on-resume = hyprctl dispatch dpms on
-		}
+    listener {
+      timeout = 660;  # 5.5min
+      on-timeout = "hyprctl dispatch dpms off";  # Turn off screen after timeout
+      on-resume = "hyprctl dispatch dpms on";  # Turn on screen after resuming from timeout
+    }
 
-		listener {
-			timeout = 1800
-			on-timeout = systemctl suspend
-		}
-	'';
-in
-{
-	options.programs.hypridle.enable = mkOption {
-		type = types.bool;
-		default = false;
-		description = "Enable hypridle user service and config";
-	};
+    listener {
+      timeout = 1800;  # 30min
+      on-timeout = "systemctl suspend";  # Suspend system after inactivity
+    }
+  '';
 
-	config = mkIf config.programs.hypridle.enable {
-		# Required runtime packages
-		home.packages = with pkgs; [
-			hypridle
-			hyprlock
-			brightnessctl
-		];
+in {
 
-		# Write the config to expected path
-		xdg.configFile."hypr/hypridle.conf".text = hypridle_config;
 
-		# User-level systemd service
-		systemd.user.services.hypridle = {
-			Unit = {
-				Description = "Hypridle (idle daemon for Hyprland)";
-				After = [ "graphical-session.target" ];
-			};
-			Service = {
-				ExecStart = "${pkgs.hypridle}/bin/hypridle";
-				Restart = "on-failure";
-			};
-			Install = {
-				WantedBy = [ "graphical-session.target" ];
-			};
-		};
-	};
+  xdg.configFile."hypr/hyprlock.conf".text = hypridle_conf;
+
+  home.packages = with pkgs; [
+    hypridle
+    brightnessctl
+  ];
 }
 
