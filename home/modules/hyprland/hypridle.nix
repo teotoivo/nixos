@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
 	hypridle_config = ''
@@ -38,16 +38,34 @@ let
 	'';
 in
 {
-	programs.hypridle.enable = true;
+	options.programs.hypridle.enable = lib.mkOption {
+		type = lib.types.bool;
+		default = false;
+		description = "Enable hypridle daemon";
+	};
 
-	# Declaratively provide config
-	xdg.configFile."hypr/hypridle.conf".text = hypridle_config;
+	config = lib.mkIf config.programs.hypridle.enable {
+		home.packages = with pkgs; [
+			hypridle
+			hyprlock
+			brightnessctl
+		];
 
-	# Optional: Ensure required packages
-	home.packages = with pkgs; [
-		hypridle
-		hyprlock
-		brightnessctl
-	];
+		xdg.configFile."hypr/hypridle.conf".text = hypridle_config;
+
+		systemd.user.services.hypridle = {
+			Unit = {
+				Description = "Hypridle daemon";
+				After = [ "graphical-session.target" ];
+			};
+			Service = {
+				ExecStart = "${pkgs.hypridle}/bin/hypridle";
+				Restart = "always";
+			};
+			Install = {
+				WantedBy = [ "graphical-session.target" ];
+			};
+		};
+	};
 }
 
