@@ -42,7 +42,7 @@ let
 in {
 
 
-  xdg.configFile."hypr/hyprlock.conf".text = hypridle_conf;
+  xdg.configFile."hypr/hypridle.conf".text = hypridle_conf;
 
   home.packages = with pkgs; [
     hypridle
