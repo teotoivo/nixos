@@ -9,6 +9,9 @@
 	imports = [
 		./modules/zsh.nix
 		./modules/git.nix
+		./modules/waybar.nix
+		./modules/wofi.nix
+		./modules/tmux.nix
 	];
 }
 
