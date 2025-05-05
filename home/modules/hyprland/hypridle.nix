@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
 	hypridle_config = ''
 		general {
@@ -38,29 +40,32 @@ let
 	'';
 in
 {
-	options.programs.hypridle.enable = lib.mkOption {
-		type = lib.types.bool;
+	options.programs.hypridle.enable = mkOption {
+		type = types.bool;
 		default = false;
-		description = "Enable hypridle daemon";
+		description = "Enable hypridle user service and config";
 	};
 
-	config = lib.mkIf config.programs.hypridle.enable {
+	config = mkIf config.programs.hypridle.enable {
+		# Required runtime packages
 		home.packages = with pkgs; [
 			hypridle
 			hyprlock
 			brightnessctl
 		];
 
+		# Write the config to expected path
 		xdg.configFile."hypr/hypridle.conf".text = hypridle_config;
 
+		# User-level systemd service
 		systemd.user.services.hypridle = {
 			Unit = {
-				Description = "Hypridle daemon";
+				Description = "Hypridle (idle daemon for Hyprland)";
 				After = [ "graphical-session.target" ];
 			};
 			Service = {
 				ExecStart = "${pkgs.hypridle}/bin/hypridle";
-				Restart = "always";
+				Restart = "on-failure";
 			};
 			Install = {
 				WantedBy = [ "graphical-session.target" ];

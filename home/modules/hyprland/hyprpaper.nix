@@ -17,7 +17,7 @@ in
 	# Download wallpaper on activation
 	home.activation.download_wallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
 		mkdir -p ~/backgrounds
-		curl --fail --silent --show-error --location --output ~/backgrounds/atlantis.jpg \
+		${pkgs.curl}/bin/curl --fail --silent --show-error --location --output ~/backgrounds/atlantis.jpg \
 			https://raw.githubusercontent.com/orangci/walls-catppuccin-mocha/master/atlantis.jpg
 	'';
 

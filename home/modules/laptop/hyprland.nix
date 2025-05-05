@@ -91,11 +91,6 @@
         active_opacity   = 1.0;
         inactive_opacity = 1.0;
 
-        # new shadow keys (Hyprland ≥ 0.46)
-        drop_shadow         = true;
-        shadow_range        = 4;
-        shadow_render_power = 3;
-        shadow_offset       = "0 0";
 
         blur = {
           enabled  = true;

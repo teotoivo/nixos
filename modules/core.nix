@@ -53,6 +53,7 @@
 		vscode
 		tree
 		pkgsUnstable.firefox
+		curl
 	];
 
 services.pipewire = {
@@ -70,5 +71,8 @@ fonts.packages = with pkgs; [
 	(nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
 ];
 
+imports = [
+	./neovim.nix
+];
 
 }
