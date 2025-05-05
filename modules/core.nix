@@ -1,5 +1,5 @@
 
-{ config, pkgs, pkgsUnstable, ... }:
+{ config, pkgs, pkgsUnstable, lib, ... }:
 
 {
 	time.timeZone = "Europe/Helsinki";

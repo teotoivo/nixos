@@ -1,5 +1,5 @@
 
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, pkgsUnstable, lib, config, ... }:
 
 {
 	programs.hyprland.enable = true;
