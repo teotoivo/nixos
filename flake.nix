@@ -1,3 +1,13 @@
+{
+        description = "Teo's modular NixOS + Home Manager setup";
+
+        inputs = {
+                nixpkgs.url        = "github:NixOS/nixpkgs/nixos-24.05";
+                nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+                home-manager.url   = "github:nix-community/home-manager/release-24.05";
+                home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+        };
 outputs = { self, nixpkgs, home-manager, nixpkgs-unstable, ... }:
 let
 	supportedSystems = ["x86_64-linux" "aarch64-linux"];
