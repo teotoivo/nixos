@@ -41,6 +41,7 @@
 	users.users.teotoivo = {
 		isNormalUser = true;
 		extraGroups = [ "wheel" "networkmanager" ];
+    shell = pkgs.zsh;
 	};
 
 	nixpkgs.config.allowUnfree = true;
@@ -58,6 +59,7 @@
 		tree
 		pkgsUnstable.firefox
 		curl
+    fzf
 	];
 
 services.pipewire = {

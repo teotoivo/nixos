@@ -5,6 +5,7 @@
 	imports = [ 
 		./hardware-configuration.nix
 		../../modules/login.nix
+    ../../modules/shells.nix
 		];
 
 	services.xserver.videoDrivers = [ "modesetting" ];

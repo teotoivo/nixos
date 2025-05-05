@@ -1,41 +1,53 @@
 { config, pkgs, ... }:
 
 {
+	# Install required packages
+	home.packages = [
+		pkgs.zsh-powerlevel10k
+		pkgs.fzf
+	];
+
+home.file.".p10k.zsh".source = /etc/nixos/home/dotfiles/p10k.zsh;
+
+	# Symlink powerlevel10k where oh-my-zsh expects it
+	home.file.".oh-my-zsh/custom/themes/powerlevel10k".source =
+		"${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
+
 	programs.zsh = {
 		enable = true;
 		enableCompletion = true;
 		enableAutosuggestions = true;
 		enableSyntaxHighlighting = true;
-		autosuggestion = {
-			enable = true;
-		};
-		syntaxHighlighting = {
-			enable = true;
-		};
 
-		ohMyZsh = {
+		oh-my-zsh = {
 			enable = true;
 			theme = "powerlevel10k/powerlevel10k";
 			plugins = [
 				"git"
-				"z"
 				"fzf"
+				"z"
 				"colored-man-pages"
-			];
-			customPkgs = with pkgs; [
-				powerlevel10k
 			];
 		};
 
-		# Optional: force Home Manager to fully manage ~/.zshrc
+		# Prevent sourcing global zshrc (reproducibility)
 		initExtraBeforeCompInit = ''
-			# Disable global zshrc sourcing for isolation
 			unsetopt GLOBAL_RCS
+      export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom/"
 		'';
 
-		# Additional customizations (safe defaults)
+		# Environment and plugin bootstrapping
 		initExtra = ''
+			# fzf plugin requires this
+			export FZF_BASE="${pkgs.fzf}/share/fzf"
+			[ -f "$FZF_BASE/shell/key-bindings.zsh" ] && source "$FZF_BASE/shell/key-bindings.zsh"
+			[ -f "$FZF_BASE/shell/completion.zsh" ] && source "$FZF_BASE/shell/completion.zsh"
+
+			# General env
 			export EDITOR=nvim
+			export PATH="$HOME/.local/bin:$PATH"
+
+      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 		'';
 	};
 }
