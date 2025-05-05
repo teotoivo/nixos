@@ -12,19 +12,29 @@
 	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
 	let
 		username = "teotoivo";
-		supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
 
-		forEachSystem = nixpkgs.lib.genAttrs supportedSystems (system: {
-			pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-			pkgsUnstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
-		});
+		for_each_system = nixpkgs.lib.genAttrs supported_systems (system:
+			let
+				pkgs = import nixpkgs {
+					inherit system;
+					config.allowUnfree = true;
+				};
+				pkgs_unstable = import nixpkgs-unstable {
+					inherit system;
+					config.allowUnfree = true;
+				};
+			in {
+				inherit pkgs pkgs_unstable;
+			}
+		);
 	in {
 		nixosConfigurations = {
 			pc = nixpkgs.lib.nixosSystem {
 				system = "x86_64-linux";
 				specialArgs = {
 					inherit username;
-					inherit (forEachSystem."x86_64-linux") pkgsUnstable;
+					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
 				};
 				modules = [
 					./hosts/pc/configuration.nix
@@ -41,7 +51,7 @@
 				system = "x86_64-linux";
 				specialArgs = {
 					inherit username;
-					inherit (forEachSystem."x86_64-linux") pkgsUnstable;
+					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
 				};
 				modules = [
 					./hosts/laptop/configuration.nix
@@ -56,9 +66,9 @@
 		};
 
 		homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-			pkgs = import nixpkgs { system = "x86_64-linux"; };
+			pkgs = for_each_system."x86_64-linux".pkgs;
 			extraSpecialArgs = {
-				inherit (forEachSystem."x86_64-linux") pkgsUnstable;
+				pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
 			};
 			modules = [ ./home/common.nix ];
 		};
