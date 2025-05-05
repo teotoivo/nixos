@@ -11,7 +11,7 @@
 		neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 	};
 
-	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixpkgs-mozilla, neovim-nightly-overlay, ... }@inputs:
+	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, ... }@inputs:
 	let
 		username = "teotoivo";
 		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
@@ -66,15 +66,6 @@
 					{
 						home-manager.users.${username}.imports = [ ./home/laptop.nix ];
 					}
-        {
-              nixpkgs.overlays = [
-                (import /etc/nixos/firefox-overlay.nix)
-              ];
-
-              environment.systemPackages = with pkgs; [
-                latest.firefox-nightly-bin
-              ];
-            }
 				];
 			};
 		};

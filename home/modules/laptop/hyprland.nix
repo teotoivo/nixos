@@ -19,7 +19,7 @@
     theme.package     = pkgs.flat-remix-gtk;
     theme.name        = "Flat-Remix-GTK-Grey-Darkest";
 
-    iconTheme.package = pkgs.gnome.adwaita-icon-theme;
+    iconTheme.package = pkgs.adwaita-icon-theme;
     iconTheme.name    = "Adwaita";
 
     font = { name = "Sans"; size = 11; };
