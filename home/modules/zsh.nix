@@ -2,6 +2,7 @@
 { pkgs, ... }:
 
 {
+
 	programs.zsh = {
 		enable = true;
 		enableCompletion = true;
@@ -17,6 +18,7 @@
 			ll = "ls -lah";
 			gs = "git status -sb";
 		};
-	};
+	
+  };
 }
 

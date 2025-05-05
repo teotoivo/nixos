@@ -5,6 +5,10 @@
 	time.timeZone = "Europe/Helsinki";
 	i18n.defaultLocale = "en_US.UTF-8";
 
+  environment.variables = {
+      EDITOR = "nvim";
+    };
+	
   	console.keyMap      = "fi";
 	services.xserver.layout = "fi";
 
@@ -28,7 +32,7 @@
   	}
 	];
 
-	
+
 
 	system.stateVersion = "24.11";
 

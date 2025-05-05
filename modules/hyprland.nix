@@ -28,6 +28,8 @@
 
     # ── Optional (commented‑out line in your Hypr cfg) ───────
     networkmanagerapplet      # nm-applet tray icon
+
+    wl-clipboard
 	];
 }
 

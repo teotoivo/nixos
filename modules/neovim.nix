@@ -1,16 +1,16 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-	neovim_unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-
-	neovim_wrapped = pkgs.wrapNeovimUnstable neovim_unwrapped {
-		# You can extend with extra runtime dependencies here
-	};
-
+	# Patch meta for the nightly overlay package
+	neovim_nightly = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default.overrideAttrs (old: {
+		meta = old.meta or { } // {
+			maintainers = [ ];
+		};
+	});
 in {
 	programs.neovim = {
 		enable = true;
-		package = neovim_wrapped;
+		package = neovim_nightly;
 		viAlias = true;
 		vimAlias = true;
 	};
@@ -23,6 +23,11 @@ in {
 		nodejs
 		git
 		nil
+
+    gcc
+    gzip
+    python3
+    unzip
 	];
 }
 
