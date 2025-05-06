@@ -22,18 +22,25 @@ boot.loader.systemd-boot.enable = false;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.useOSProber = true;
 
+services = {
+    logind = {
+        lidSwitch = "poweroff";
+        lidSwitchDocked = "poweroff";
+    };
+  };
+
 	security.pam.loginLimits = [
   	{
-    		domain = "@users";
-   	 	type = "soft";
-   	 	item = "nofile";
-   	 	value = "65536";
+    	domain = "@users";
+      type = "soft";
+      item = "nofile";
+      value = "65536";
   	}
   	{
-    		domain = "@users";
-    		type = "hard";
-    		item = "nofile";
-    		value = "65536";
+      domain = "@users";
+    	type = "hard";
+    	item = "nofile";
+    	value = "65536";
   	}
 	];
 
