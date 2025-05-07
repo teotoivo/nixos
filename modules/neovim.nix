@@ -23,11 +23,6 @@ in {
 		nodejs
 		git
 		nil
-
-    gcc
-    gzip
-    python3
-    unzip
 	];
 }
 

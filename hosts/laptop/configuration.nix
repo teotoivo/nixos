@@ -10,5 +10,8 @@
 
 	services.xserver.videoDrivers = [ "modesetting" ];
 	environment.sessionVariables.HYPR_SCALE = "1.25";
+
+  services.tlp.enable = true;
+  powerManagement.cpuFreqGovernor = "schedutil";
 }
 

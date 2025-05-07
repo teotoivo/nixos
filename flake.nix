@@ -1,5 +1,5 @@
 {
-	description = "Teo's modular NixOS + Home Manager setup";
+	description = "Teo's streamlined NixOS + Home Manager setup";
 
 	inputs = {
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
@@ -13,31 +13,24 @@
 
 	outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, neovim-nightly-overlay, ... }@inputs:
 	let
+		system = "x86_64-linux";
 		username = "teotoivo";
-		supported_systems = [ "x86_64-linux" "aarch64-linux" ];
 
-		for_each_system = nixpkgs.lib.genAttrs supported_systems (system:
-			let
-				pkgs = import nixpkgs {
-					inherit system;
-					config.allowUnfree = true;
-				};
-				pkgs_unstable = import nixpkgs-unstable {
-					inherit system;
-					config.allowUnfree = true;
-				};
-			in {
-				inherit pkgs pkgs_unstable;
-			}
-		);
+		pkgs = import nixpkgs {
+			inherit system;
+			config.allowUnfree = true;
+		};
+
+		pkgsUnstable = import nixpkgs-unstable {
+			inherit system;
+			config.allowUnfree = true;
+		};
 	in {
 		nixosConfigurations = {
 			pc = nixpkgs.lib.nixosSystem {
-				system = "x86_64-linux";
+				inherit system;
 				specialArgs = {
-					inherit username;
-					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
-					inputs = inputs;
+					inherit username pkgsUnstable inputs;
 				};
 				modules = [
 					./hosts/pc/configuration.nix
@@ -51,12 +44,9 @@
 			};
 
 			laptop = nixpkgs.lib.nixosSystem {
-				system = "x86_64-linux";
+				inherit system;
 				specialArgs = {
-					inherit username;
-					pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
-          pkgs = for_each_system."x86_64-linux".pkgs;
-					inputs = inputs;
+					inherit username pkgsUnstable inputs;
 				};
 				modules = [
 					./hosts/laptop/configuration.nix
@@ -71,9 +61,9 @@
 		};
 
 		homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-			pkgs = for_each_system."x86_64-linux".pkgs;
+			inherit pkgs;
 			extraSpecialArgs = {
-				pkgsUnstable = for_each_system."x86_64-linux".pkgs_unstable;
+				inherit pkgsUnstable;
 			};
 			modules = [ ./home/common.nix ];
 		};
